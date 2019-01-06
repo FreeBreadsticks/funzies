@@ -5,6 +5,8 @@ export default class Order extends Component {
   renderOrder = key => {
     const fish = this.props.fishes[key];
     const count = this.props.order[key];
+    //make sure fish is loaded before continuing
+    if (!fish) return null;
     const isAvailable = fish.status === "available";
     if (!isAvailable) {
       return (
@@ -31,10 +33,11 @@ export default class Order extends Component {
       }
       return prevTotal;
     }, 0);
+
     return (
       <div className="order-wrap">
         <h2>Order</h2>
-        <ul>{orderIds.map(this.renderOrder)}</ul>
+        <ul className="order">{orderIds.map(this.renderOrder)}</ul>
         <div className="total">
           Total:
           <strong>{formatPrice(total)}</strong>

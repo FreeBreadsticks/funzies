@@ -14,10 +14,23 @@ export default class App extends Component {
 
   componentDidMount() {
     const { params } = this.props.match;
+    //reinstate local storage
+    const localStorageRef = localStorage.getItem(params.storeId);
+    if (localStorageRef) {
+      this.setState({ order: JSON.parse(localStorageRef) });
+    }
     this.ref = base.syncState(`${params.storeId}/fishes`, {
       context: this,
       state: "fishes"
     });
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem(
+      this.props.match.params.storeId,
+      JSON.stringify(this.state.order)
+    );
+    console.log("Updated");
   }
 
   componentWillUnmount() {
@@ -72,6 +85,7 @@ export default class App extends Component {
         <Inventory
           addFish={this.addFish}
           loadSampleFishes={this.loadSampleFishes}
+          fish={this.state.fishes}
         />
       </div>
     );
