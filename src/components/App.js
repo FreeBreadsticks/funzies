@@ -48,6 +48,28 @@ export default class App extends Component {
     });
   };
 
+  updateFish = (key, updatedFish) => {
+    //take copy of current state
+    const fishes = { ...this.state.fishes };
+    //Update that state
+    fishes[key] = updatedFish;
+    //Set that to the state
+    this.setState({
+      fishes: fishes
+    });
+  };
+
+  deleteFish = key => {
+    //take a copy of state
+    const fishes = { ...this.state.fishes };
+    //update the specific fish set to null for firebase
+    fishes[key] = null;
+    //update state
+    this.setState({
+      fishes: fishes
+    });
+  };
+
   loadSampleFishes = () => {
     this.setState({ fishes: sampleFishes });
   };
@@ -63,6 +85,17 @@ export default class App extends Component {
       order: order
     });
     console.log(this.state);
+  };
+
+  deleteOrder = key => {
+    //take copy of state
+    const order = { ...this.state.order };
+    console.log(key);
+    //delete the specific order
+    delete order[key];
+    this.setState({
+      order: order
+    });
   };
 
   render() {
@@ -81,9 +114,15 @@ export default class App extends Component {
             ))}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order} />
+        <Order
+          fishes={this.state.fishes}
+          order={this.state.order}
+          deleteOrder={this.deleteOrder}
+        />
         <Inventory
           addFish={this.addFish}
+          updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
           fish={this.state.fishes}
         />
